@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YT STAR — Next-Gen Video Downloader</title>
+    <meta name="description"
+        content="YT STAR — paste a video link and download it instantly. Fast, clean, and easy video & audio downloader.">
+    <link rel="icon" type="image/svg+xml" href="img/favicon.svg">
+    <!-- Set theme BEFORE CSS paints to avoid a light/dark flash on load. -->
+    <script>
+        (function () {
+            try {
+                var t = localStorage.getItem('ytstar-theme');
+                if (!t) {
+                    t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark';
+                }
+                document.documentElement.setAttribute('data-theme', t);
+            } catch (e) { /* localStorage blocked — default dark via CSS */ }
+        })();
+    </script>
+    <link rel="stylesheet" href="style.css?v=3">
+</head>
+
+<body>
+
+    <!-- Ambient Background Orbs -->
+    <div class="ambient-bg">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <div class="app-container">
+
+        <!-- ── Header ─────────────────────────────────────────────────── -->
+        <header class="app-header">
+            <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Toggle light and dark theme"
+                title="Toggle theme">
+                <svg class="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <path class="sun-icon"
+                        d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42">
+                    </path>
+                    <circle class="sun-circle" cx="12" cy="12" r="5"></circle>
+                    <path class="moon-icon" d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+            </button>
+
+            <div class="logo-wrapper">
+                <svg class="app-logo-img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 380" aria-label="YT STAR">
+                    <defs>
+                        <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+                            <feGaussianBlur stdDeviation="8" result="blur" />
+                            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                        </filter>
+                        <filter id="starGlow" x="-30%" y="-30%" width="160%" height="160%">
+                            <feGaussianBlur stdDeviation="5" result="blur" />
+                            <feComponentTransfer in="blur" result="glow">
+                                <feFuncA type="linear" slope="0.6" />
+                            </feComponentTransfer>
+                            <feMerge>
+                                <feMergeNode in="glow" />
+                                <feMergeNode in="SourceGraphic" />
+                            </feMerge>
+                        </filter>
+                        <linearGradient id="redGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#ff3b5f" />
+                            <stop offset="50%" stop-color="#e11d48" />
+                            <stop offset="100%" stop-color="#88051e" />
+                        </linearGradient>
+                        <linearGradient id="glossGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#ffffff" stop-opacity="0.6" />
+                            <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+                        </linearGradient>
+                        <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#ffe875" />
+                            <stop offset="40%" stop-color="#f59e0b" />
+                            <stop offset="100%" stop-color="#b45309" />
+                        </linearGradient>
+                        <linearGradient id="goldLight" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#fffbeb" />
+                            <stop offset="60%" stop-color="#fbbf24" />
+                            <stop offset="100%" stop-color="#d97706" />
+                        </linearGradient>
+                        <linearGradient id="goldDark" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#f59e0b" />
+                            <stop offset="100%" stop-color="#78350f" />
+                        </linearGradient>
+                        <linearGradient id="goldGradText" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" stop-color="#fef08a" />
+                            <stop offset="50%" stop-color="#f59e0b" />
+                            <stop offset="100%" stop-color="#b45309" />
+                        </linearGradient>
+                    </defs>
+                    <g transform="translate(0, -10)">
+                        <g transform="rotate(-6, 250, 150)" filter="url(#glow)">
+                            <path
+                                d="M 180,95 C 180,75 200,70 215,80 L 310,135 C 325,145 325,165 310,175 L 215,230 C 200,240 180,235 180,215 Z"
+                                fill="url(#redGrad)" />
+                            <path
+                                d="M 183,98 C 183,82 198,78 210,86 L 303,138 C 315,145 315,160 303,168 L 210,220 C 198,228 183,224 183,208 Z"
+                                fill="none" stroke="#ff859b" stroke-width="1.5" stroke-opacity="0.3" />
+                            <path
+                                d="M 180,95 C 180,75 200,70 215,80 L 310,135 C 317,139 319,145 317,150 C 285,142 245,130 180,122 Z"
+                                fill="url(#glossGrad)" />
+                        </g>
+                        <path
+                            d="M 155,200 C 140,242 175,272 225,272 C 275,272 298,225 288,180 C 280,155 258,143 242,136 C 255,147 266,168 260,195 C 250,225 230,248 198,248 C 172,248 163,222 167,200 Z"
+                            fill="url(#goldGrad)" filter="url(#starGlow)" />
+                        <g transform="rotate(16, 265, 132)" filter="url(#starGlow)">
+                            <path d="M 265,135 L 265,87 L 276.76,118.82 Z" fill="url(#goldLight)" />
+                            <path d="M 265,135 L 253.24,118.82 L 265,87 Z" fill="url(#goldDark)" />
+                            <path d="M 265,135 L 276.76,118.82 L 310.65,120.17 Z" fill="url(#goldDark)" />
+                            <path d="M 265,135 L 310.65,120.17 L 284.02,141.18 Z" fill="url(#goldLight)" />
+                            <path d="M 265,135 L 284.02,141.18 L 293.22,173.83 Z" fill="url(#goldDark)" />
+                            <path d="M 265,135 L 293.22,173.83 L 265,155 Z" fill="url(#goldLight)" />
+                            <path d="M 265,135 L 265,155 L 236.78,173.83 Z" fill="url(#goldDark)" />
+                            <path d="M 265,135 L 236.78,173.83 L 245.98,141.18 Z" fill="url(#goldLight)" />
+                            <path d="M 265,135 L 245.98,141.18 L 219.35,120.17 Z" fill="url(#goldDark)" />
+                            <path d="M 265,135 L 219.35,120.17 L 253.24,118.82 Z" fill="url(#goldLight)" />
+                        </g>
+                        <path d="M 325,97 Q 325,105 333,105 Q 325,105 325,113 Q 325,105 317,105 Q 325,105 325,97 Z"
+                            fill="#fffbeb" filter="url(#starGlow)" />
+                        <path d="M 355,125 Q 355,130 360,130 Q 355,130 355,135 Q 355,130 350,130 Q 355,130 355,125 Z"
+                            fill="#fffbeb" filter="url(#starGlow)" />
+                        <path d="M 143,185 Q 143,190 148,190 Q 143,190 143,195 Q 143,190 138,190 Q 143,190 143,185 Z"
+                            fill="#fffbeb" filter="url(#starGlow)" />
+                    </g>
+                    <text x="250" y="315" font-family="'Inter', -apple-system, sans-serif" font-weight="800"
+                        font-size="44" text-anchor="middle" letter-spacing="-0.5px">
+                        <tspan class="logo-text-yt">YT </tspan>
+                        <tspan fill="url(#goldGradText)">STAR</tspan>
+                    </text>
+                    <text x="250" y="348" font-family="'Inter', -apple-system, sans-serif" font-weight="500"
+                        font-size="12.5" text-anchor="middle" class="logo-text-sub" letter-spacing="1.2px">
+                        Link to Video Converter &amp; Downloader
+                    </text>
+                </svg>
+            </div>
+        </header>
+
+        <!-- ── URL Input ──────────────────────────────────────────────── -->
+        <section class="url-section">
+            <div class="url-input-wrapper">
+                <span class="url-input-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                    </svg>
+                </span>
+                <input type="url" id="url-input" class="url-input" placeholder="Paste video link here..."
+                    autocomplete="off" spellcheck="false">
+                <button id="btn-fetch" class="btn-fetch" type="button">
+                    <span class="btn-text">Fetch</span>
+                    <div class="spinner"></div>
+                </button>
+            </div>
+            <p class="url-hint">Supports 1000+ platforms. Paste link to fetch automatically.</p>
+        </section>
+
+        <!-- ── Skeleton Loader ────────────────────────────────────────── -->
+        <section id="skeleton-card" class="bento-card skeleton-card hidden" aria-hidden="true">
+            <div class="bento-layout">
+                <div class="skeleton skeleton-thumb"></div>
+                <div class="skeleton-meta">
+                    <div class="skeleton skeleton-line lg"></div>
+                    <div class="skeleton skeleton-line md"></div>
+                    <div class="skeleton skeleton-line sm"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── Bento Workspace (Video Info + Formats) ─────────────────── -->
+        <div id="workspace" class="workspace hidden">
+            <!-- Video Info Card -->
+            <section id="video-card" class="bento-card video-card">
+                <div class="bento-layout">
+                    <div class="video-thumbnail-wrapper">
+                        <img id="video-thumbnail" class="video-thumbnail" src="" alt="Thumbnail">
+                        <span id="video-duration" class="video-duration-badge"></span>
+                        <div class="thumbnail-glow"></div>
+                    </div>
+                    <div class="video-meta">
+                        <h2 id="video-title" class="video-title"></h2>
+                        <p id="video-channel" class="video-channel"></p>
+                        <div class="video-stats">
+                            <span id="video-views" class="video-stat"></span>
+                            <span id="video-date" class="video-stat"></span>
+                        </div>
+                        <span id="video-extractor" class="video-extractor-badge"></span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Format Picker Card -->
+            <section id="format-section" class="bento-card format-section">
+                <div class="section-header">
+                    <h3 class="section-title"><span class="icon">🎬</span> <span id="format-section-label">Choose
+                            Quality</span></h3>
+                    <div class="mode-toggle">
+                        <button id="mode-video" class="mode-btn active" type="button">🎬 Video</button>
+                        <button id="mode-audio" class="mode-btn" type="button">🎵 Audio</button>
+                    </div>
+                </div>
+
+                <div id="quality-grid" class="quality-grid"></div>
+
+                <div id="audio-format-row" class="audio-format-row hidden">
+                    <label for="audio-format">Audio format:</label>
+                    <select id="audio-format" class="audio-format-select">
+                        <option value="mp3" selected>MP3</option>
+                        <option value="aac">AAC</option>
+                        <option value="flac">FLAC</option>
+                        <option value="wav">WAV</option>
+                        <option value="opus">Opus</option>
+                        <option value="vorbis">Vorbis</option>
+                    </select>
+                </div>
+            </section>
+        </div>
+
+        <!-- ── Download Action Area ───────────────────────────────────── -->
+        <section id="download-section" class="download-section hidden">
+            <button id="btn-download" class="btn-download" type="button">
+                <span>⬇️</span>
+                <span id="btn-download-text">Download Now</span>
+            </button>
+        </section>
+
+        <!-- ── Progress Section ───────────────────────────────────────── -->
+        <section id="progress-section" class="bento-card progress-section hidden">
+            <div class="progress-header">
+                <span class="progress-title"><span class="icon">📥</span> Processing</span>
+                <span id="progress-status" class="progress-status downloading">Downloading</span>
+            </div>
+            <div class="progress-bar-wrapper">
+                <div id="progress-bar" class="progress-bar" style="width: 0%"></div>
+            </div>
+            <div class="progress-stats">
+                <span id="progress-percent" class="progress-percent">0%</span>
+                <span id="progress-speed"></span>
+                <span id="progress-eta"></span>
+            </div>
+            <div id="progress-error" class="progress-error hidden"></div>
+            <button id="btn-cancel" class="btn-cancel" type="button">
+                <span>✕</span> Cancel
+            </button>
+            <a id="btn-save" class="btn-save hidden" href="#" download>
+                <span>💾</span> Save File
+            </a>
+        </section>
+
+        <!-- ── Empty State ────────────────────────────────────────────── -->
+        <section id="empty-state" class="empty-state">
+            <div class="empty-icon-wrapper">
+                <div class="icon">🎬</div>
+            </div>
+            <h3 class="empty-title">Ready to Download</h3>
+            <p>Paste a video link above to get started. It's fast, clean, and easy.</p>
+        </section>
+
+        <!-- ── Footer ─────────────────────────────────────────────────── -->
+        <footer class="app-footer">
+            <a class="footer-badge" href="https://ayuslabs.com" target="_blank" rel="noopener">
+                <span class="footer-badge-text">Powered By</span>
+                <img class="footer-badge-logo" src="img/AYUS%20Circular.png" alt="AYUS">
+            </a>
+            <p class="footer-copyright">© 2026 <strong>YT STAR</strong>. All rights reserved.</p>
+        </footer>
+
+    </div>
+
+    <!-- ── Toast Container ────────────────────────────────────────────── -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="app.js?v=3"></script>
+</body>
+
+</html>
