@@ -60,23 +60,50 @@ ARIA2C_PATH = _find_aria2c()
 
 # On a cloud/datacenter IP, YouTube often demands "confirm you're not a bot".
 # Two ways to authenticate past the bot wall:
-#   1. Drop a Netscape-format cookies.txt next to this file (exported from a
-#      logged-in browser). yt-dlp will use it automatically.
+#   1. Provide a Netscape-format cookies.txt (exported from a logged-in
+#      browser). yt-dlp uses it automatically. We probe several locations so the
+#      same code works locally and on hosts like Render (see _find_cookies_file).
 #   2. Or set YTSTAR_COOKIES_BROWSER=firefox (or chrome/edge/brave) and yt-dlp
 #      reads cookies straight from that browser — no file to manage. Firefox is
 #      most reliable on Windows; Chrome/Edge may need the browser fully closed.
-COOKIES_FILE = Path(__file__).parent / "cookies.txt"
 COOKIES_BROWSER = os.environ.get("YTSTAR_COOKIES_BROWSER", "").strip().lower()
+
+# Where to look for a cookies.txt, in priority order:
+#   1. $YTSTAR_COOKIES_FILE     — explicit path override
+#   2. backend/cookies.txt      — local dev (sits next to this file)
+#   3. /etc/secrets/cookies.txt — Render mounts a Secret File here. Render's
+#      Filename field only accepts a bare name (no slashes), so a secret file
+#      named "cookies.txt" lands at /etc/secrets/cookies.txt, not our backend/ path.
+_COOKIE_LOCATIONS = (
+    Path(__file__).parent / "cookies.txt",
+    Path("/etc/secrets/cookies.txt"),
+)
+
+
+def _find_cookies_file() -> Path | None:
+    """First existing, non-empty cookies.txt among the known locations, or None.
+
+    An empty file is skipped so a stray blank cookies.txt can't break extraction.
+    """
+    env_path = os.environ.get("YTSTAR_COOKIES_FILE", "").strip()
+    candidates = (Path(env_path), *_COOKIE_LOCATIONS) if env_path else _COOKIE_LOCATIONS
+    for p in candidates:
+        try:
+            if p.exists() and p.stat().st_size > 0:
+                return p
+        except OSError:
+            continue
+    return None
 
 
 def _apply_common_opts(opts: dict) -> dict:
     """Inject options shared by both info-extraction and download."""
     opts["cachedir"] = False  # don't reuse stale extraction cache
-    # Prefer an explicit, non-empty cookies.txt; otherwise fall back to reading
-    # cookies directly from a configured browser. (An empty cookies.txt is
-    # ignored so a stray blank file doesn't break extraction.)
-    if COOKIES_FILE.exists() and COOKIES_FILE.stat().st_size > 0:
-        opts["cookiefile"] = str(COOKIES_FILE)
+    # Prefer a non-empty cookies.txt; otherwise fall back to reading cookies
+    # directly from a configured browser.
+    cookies = _find_cookies_file()
+    if cookies:
+        opts["cookiefile"] = str(cookies)
     elif COOKIES_BROWSER:
         opts["cookiesfrombrowser"] = (COOKIES_BROWSER,)
     return opts

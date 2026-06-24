@@ -12,6 +12,10 @@ backend/downloads/
 # ---- Vendored third-party binaries ----
 backend/bin/
 
+# ---- Secrets (browser cookies for yt-dlp auth — NEVER commit) ----
+cookies.txt
+backend/cookies.txt
+
 # ---- Python ----
 __pycache__/
 *.py[cod]
