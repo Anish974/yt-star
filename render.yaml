@@ -20,9 +20,12 @@ services:
       - key: PYTHONUNBUFFERED
         value: "1"
       # YouTube blocks datacenter IPs. If downloads fail with "Sign in to confirm
-      # you're not a bot", drop a Netscape cookies.txt at backend/cookies.txt
-      # (the app reads it automatically). Do NOT commit it — add it via a Render
-      # Secret File in the dashboard (Settings -> Secret Files -> /app/backend/cookies.txt).
+      # you're not a bot", add your YouTube cookies as a Render Secret File:
+      #   Dashboard -> this service -> Environment -> Secret Files -> Add Secret File
+      #     Filename: cookies.txt   (bare name only; Render rejects slashed paths)
+      #     Contents: paste a Netscape-format cookies.txt exported from a browser
+      # Render mounts it at /etc/secrets/cookies.txt, which the app reads
+      # automatically (backend/downloader.py:_find_cookies_file). Never commit it.
 
     # ── Persistent storage (PAID plans only) ─────────────────────────────────
     # Uncomment after upgrading from free to keep downloads across restarts:
