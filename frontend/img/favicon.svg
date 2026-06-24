@@ -1,0 +1,104 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="125 45 250 250" width="100%" height="100%">
+  <defs>
+    <!-- Glow filter for the red play button and the star -->
+    <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="8" result="blur" />
+      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+    </filter>
+    
+    <filter id="starGlow" x="-30%" y="-30%" width="160%" height="160%">
+      <feGaussianBlur stdDeviation="5" result="blur" />
+      <feComponentTransfer in="blur" result="glow">
+        <feFuncA type="linear" slope="0.6" />
+      </feComponentTransfer>
+      <feMerge>
+        <feMergeNode in="glow" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+
+    <!-- Gradients -->
+    <!-- Play button red gradient -->
+    <linearGradient id="redGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff3b5f" />
+      <stop offset="50%" stop-color="#e11d48" />
+      <stop offset="100%" stop-color="#88051e" />
+    </linearGradient>
+
+    <!-- Play button gloss/highlight gradient -->
+    <linearGradient id="glossGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0.6" />
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+    </linearGradient>
+
+    <!-- Golden swoop gradient -->
+    <linearGradient id="goldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ffe875" />
+      <stop offset="40%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#b45309" />
+    </linearGradient>
+
+    <!-- Star gold facets -->
+    <linearGradient id="goldLight" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#fffbeb" />
+      <stop offset="60%" stop-color="#fbbf24" />
+      <stop offset="100%" stop-color="#d97706" />
+    </linearGradient>
+
+    <linearGradient id="goldDark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f59e0b" />
+      <stop offset="100%" stop-color="#78350f" />
+    </linearGradient>
+  </defs>
+
+  <!-- Graphic Group -->
+  <g transform="translate(0, -10)">
+    <!-- Play button (Red Heart Shape) -->
+    <g transform="rotate(-6, 250, 150)" filter="url(#glow)">
+      <!-- Main red body -->
+      <path d="M 180,95 C 180,75 200,70 215,80 L 310,135 C 325,145 325,165 310,175 L 215,230 C 200,240 180,235 180,215 Z" fill="url(#redGrad)" />
+      
+      <!-- Inner shadow/glow path for depth -->
+      <path d="M 183,98 C 183,82 198,78 210,86 L 303,138 C 315,145 315,160 303,168 L 210,220 C 198,228 183,224 183,208 Z" fill="none" stroke="#ff859b" stroke-width="1.5" stroke-opacity="0.3" />
+      
+      <!-- Gloss Highlight -->
+      <path d="M 180,95 C 180,75 200,70 215,80 L 310,135 C 317,139 319,145 317,150 C 285,142 245,130 180,122 Z" fill="url(#glossGrad)" />
+    </g>
+
+    <!-- Golden Swoop (swooshing ribbon wrapping around play button) -->
+    <path d="M 155,200 C 140,242 175,272 225,272 C 275,272 298,225 288,180 C 280,155 258,143 242,136 C 255,147 266,168 260,195 C 250,225 230,248 198,248 C 172,248 163,222 167,200 Z" fill="url(#goldGrad)" filter="url(#starGlow)" />
+
+    <!-- 3D Faceted Gold Star -->
+    <g transform="rotate(16, 265, 132)" filter="url(#starGlow)">
+      <!-- Facet 1: Top tip, right half -->
+      <path d="M 265,135 L 265,87 L 276.76,118.82 Z" fill="url(#goldLight)" />
+      <!-- Facet 2: Top tip, left half -->
+      <path d="M 265,135 L 253.24,118.82 L 265,87 Z" fill="url(#goldDark)" />
+      
+      <!-- Facet 3: Right-top tip, top half -->
+      <path d="M 265,135 L 276.76,118.82 L 310.65,120.17 Z" fill="url(#goldDark)" />
+      <!-- Facet 4: Right-top tip, bottom half -->
+      <path d="M 265,135 L 310.65,120.17 L 284.02,141.18 Z" fill="url(#goldLight)" />
+      
+      <!-- Facet 5: Right-bottom tip, right half -->
+      <path d="M 265,135 L 284.02,141.18 L 293.22,173.83 Z" fill="url(#goldDark)" />
+      <!-- Facet 6: Right-bottom tip, left half -->
+      <path d="M 265,135 L 293.22,173.83 L 265,155 Z" fill="url(#goldLight)" />
+      
+      <!-- Facet 7: Left-bottom tip, right half -->
+      <path d="M 265,135 L 265,155 L 236.78,173.83 Z" fill="url(#goldDark)" />
+      <!-- Facet 8: Left-bottom tip, left half -->
+      <path d="M 265,135 L 236.78,173.83 L 245.98,141.18 Z" fill="url(#goldLight)" />
+      
+      <!-- Facet 9: Left-top tip, bottom half -->
+      <path d="M 265,135 L 245.98,141.18 L 219.35,120.17 Z" fill="url(#goldDark)" />
+      <!-- Facet 10: Left-top tip, top half -->
+      <path d="M 265,135 L 219.35,120.17 L 253.24,118.82 Z" fill="url(#goldLight)" />
+    </g>
+    
+    <!-- Sparkles / Little Stars -->
+    <path d="M 325,97 Q 325,105 333,105 Q 325,105 325,113 Q 325,105 317,105 Q 325,105 325,97 Z" fill="#fffbeb" filter="url(#starGlow)" />
+    <path d="M 355,125 Q 355,130 360,130 Q 355,130 355,135 Q 355,130 350,130 Q 355,130 355,125 Z" fill="#fffbeb" filter="url(#starGlow)" />
+    <path d="M 143,185 Q 143,190 148,190 Q 143,190 143,195 Q 143,190 138,190 Q 143,190 143,185 Z" fill="#fffbeb" filter="url(#starGlow)" />
+  </g>
+</svg>

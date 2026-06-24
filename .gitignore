@@ -1,0 +1,42 @@
+# ---- Runtime data / downloaded media (large, never commit) ----
+backend/cache/
+backend/downloads/
+*.mp4
+*.mkv
+*.webm
+*.m4a
+*.part
+*.ytdl
+*.tmp
+
+# ---- Vendored third-party binaries ----
+backend/bin/
+
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+.venv/
+venv/
+env/
+.env
+*.env
+
+# ---- Node (in case frontend tooling is added later) ----
+node_modules/
+dist/
+build/
+
+# ---- Local editor / tool settings ----
+.vscode/
+.idea/
+
+# ---- OS junk ----
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# ---- Local experimental / backup copies (kept on disk, not tracked) ----
+frontend/index1.html
+frontend/style1.css
