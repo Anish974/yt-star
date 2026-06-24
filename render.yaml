@@ -1,0 +1,32 @@
+# Render Blueprint — free Docker web service.
+# Deploy: Render Dashboard -> New + -> Blueprint -> pick this repo/branch.
+#
+# FREE TIER NOTES:
+#   * Sleeps after ~15 min idle (first request after that is a slow cold start).
+#   * Filesystem is EPHEMERAL — downloaded videos are wiped on every restart/deploy.
+#     To keep files, upgrade to a paid plan and add a `disk:` block (see commented
+#     section below), then mount it at /app/backend/downloads.
+services:
+  - type: web
+    name: ytstar
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    # Build context is the repo root (where backend/ and frontend/ live).
+    dockerContext: .
+    healthCheckPath: /
+    autoDeployTrigger: commit
+    envVars:
+      - key: PYTHONUNBUFFERED
+        value: "1"
+      # YouTube blocks datacenter IPs. If downloads fail with "Sign in to confirm
+      # you're not a bot", drop a Netscape cookies.txt at backend/cookies.txt
+      # (the app reads it automatically). Do NOT commit it — add it via a Render
+      # Secret File in the dashboard (Settings -> Secret Files -> /app/backend/cookies.txt).
+
+    # ── Persistent storage (PAID plans only) ─────────────────────────────────
+    # Uncomment after upgrading from free to keep downloads across restarts:
+    # disk:
+    #   name: ytstar-data
+    #   mountPath: /app/backend/downloads
+    #   sizeGB: 10

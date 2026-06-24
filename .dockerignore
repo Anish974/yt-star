@@ -1,0 +1,34 @@
+# Keep the build context tiny and never bake runtime data / secrets into the image.
+.git/
+.gitignore
+
+# Runtime data (large, regenerated at runtime)
+backend/cache/
+backend/downloads/
+backend/__pycache__/
+**/__pycache__/
+*.py[cod]
+*.mp4
+*.mkv
+*.webm
+*.m4a
+*.part
+*.ytdl
+
+# Vendored Windows-only binary (Linux image installs aria2 via apt instead)
+backend/bin/
+
+# Secrets — must never end up in an image layer
+cookies.txt
+backend/cookies.txt
+*.env
+
+# Local experimental copies
+frontend/index1.html
+frontend/style1.css
+
+# Local envs / editor
+.venv/
+venv/
+.vscode/
+.idea/
