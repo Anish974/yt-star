@@ -7,7 +7,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, StreamingResponse
 from fastapi.staticfiles import StaticFiles
 
-from downloader import DownloadManager
+from downloader import DownloadManager, humanize_error
 from models import DownloadRequest
 
 app = FastAPI(title="YTStar", description="Self-hosted video downloader powered by yt-dlp")
@@ -60,7 +60,8 @@ def get_video_info(url: str, response: Response):
         info = manager.fetch_info(url)
         return info
     except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        print(f"[ytstar] info failed for {url}: {e}", flush=True)
+        raise HTTPException(status_code=400, detail=humanize_error(e))
 
 
 @app.post("/api/download")
@@ -70,7 +71,8 @@ async def start_download(request: DownloadRequest):
         job_id = manager.start_download(request)
         return {"job_id": job_id}
     except Exception as e:
-        raise HTTPException(status_code=400, detail=str(e))
+        print(f"[ytstar] download start failed: {e}", flush=True)
+        raise HTTPException(status_code=400, detail=humanize_error(e))
 
 
 @app.get("/api/progress/{job_id}")
