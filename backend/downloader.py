@@ -127,6 +127,84 @@ def _apply_common_opts(opts: dict) -> dict:
     return opts
 
 
+def humanize_error(exc: object) -> str:
+    """Turn a raw yt-dlp/exception message into a short, user-facing explanation.
+
+    yt-dlp errors are long and technical (e.g. "ERROR: [youtube] abc: Sign in to
+    confirm you're not a bot. Use --cookies-from-browser ... See https://..."),
+    which is noise to an end user. We map the common failure signatures to a
+    single clear sentence and tell them whether retrying is worth it. The raw
+    error is still logged server-side for debugging.
+    """
+    raw = str(exc).strip()
+    low = raw.lower()
+
+    # Most specific signatures first.
+    if "not a bot" in low:
+        return (
+            "YouTube is temporarily blocking this server (bot check). Some videos "
+            "do this on hosted servers — please try again in a moment, or try a "
+            "different video."
+        )
+    if "confirm your age" in low or "age-restricted" in low or "inappropriate for some" in low:
+        return "This video is age-restricted and can't be downloaded."
+    if "private video" in low:
+        return "This is a private video, so it can't be downloaded."
+    if (
+        "members-only" in low
+        or "members only" in low
+        or "join this channel" in low
+        or "available to this channel's members" in low
+    ):
+        return "This video is members-only and can't be downloaded."
+    if "drm" in low:
+        return "This video is DRM-protected and can't be downloaded."
+    if "requested format is not available" in low:
+        return "That quality isn't available for this video — try a different one."
+    if "premiere" in low or "this live event will begin" in low or "will begin in" in low:
+        return "This is an upcoming premiere/live stream — it isn't available yet."
+    if "is live" in low and "download" in low:
+        return "Live streams can't be downloaded while they're still live."
+    if (
+        "not available in your country" in low
+        or "blocked it in your country" in low
+        or ("geo" in low and "restrict" in low)
+    ):
+        return "This video is blocked in the server's region."
+    if (
+        "video unavailable" in low
+        or "no longer available" in low
+        or "has been removed" in low
+        or "removed by the uploader" in low
+        or "account associated with this video has been terminated" in low
+    ):
+        return "This video is unavailable (it may be private, deleted, or region-locked)."
+    if "unsupported url" in low or "is not a valid url" in low:
+        return "That link isn't supported. Paste a valid video URL."
+    if any(
+        s in low
+        for s in (
+            "timed out",
+            "timeout",
+            "connection refused",
+            "getaddrinfo",
+            "failed to resolve",
+            "network is unreachable",
+            "temporary failure in name resolution",
+        )
+    ):
+        return "Network problem reaching the video server. Please try again."
+
+    # Fallback: strip yt-dlp's noisy prefixes and the cookies/wiki advice tail,
+    # leaving just the core message.
+    cleaned = re.sub(r"^ERROR:\s*", "", raw)
+    cleaned = re.sub(r"^\[[^\]]+\]\s*[\w-]+:\s*", "", cleaned)  # "[youtube] ID: "
+    cleaned = cleaned.split(". Use --cookies")[0].split(". See ")[0].strip()
+    if not cleaned:
+        return "Something went wrong while processing this video. Please try again."
+    return cleaned[:200]
+
+
 def _safe(s: str | None) -> str:
     """Strip anything that isn't filesystem-safe."""
     return re.sub(r"[^A-Za-z0-9_-]", "", s or "")
@@ -544,7 +622,10 @@ class DownloadManager:
                 self._cleanup_partial_files(job)
             else:
                 job.status = "error"
-                job.error = str(e)
+                # Log the raw error for debugging (visible in server logs),
+                # but show the user a clean, friendly message.
+                print(f"[ytstar] download {job.job_id} failed: {e}", flush=True)
+                job.error = humanize_error(e)
 
         finally:
             job.notify_listeners()
