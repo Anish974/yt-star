@@ -96,9 +96,27 @@ def _find_cookies_file() -> Path | None:
     return None
 
 
+# YouTube bot-walls its default `web` player client hardest, especially from
+# datacenter IPs — that's the "Sign in to confirm you're not a bot" error even
+# when valid cookies are present. The `android` client talks to a different API
+# that is challenged far less often, so we try it first and fall back to `web`
+# for the occasional video android can't serve. Biggest reliability win after
+# cookies. Override with $YTSTAR_PLAYER_CLIENTS="ios,web" if YouTube shifts again.
+YOUTUBE_PLAYER_CLIENTS = [
+    c.strip()
+    for c in os.environ.get("YTSTAR_PLAYER_CLIENTS", "android,android_vr,web").split(",")
+    if c.strip()
+]
+
+
 def _apply_common_opts(opts: dict) -> dict:
     """Inject options shared by both info-extraction and download."""
     opts["cachedir"] = False  # don't reuse stale extraction cache
+    # Prefer bot-resistant player clients (see YOUTUBE_PLAYER_CLIENTS).
+    opts.setdefault("extractor_args", {})
+    opts["extractor_args"].setdefault("youtube", {})["player_client"] = list(
+        YOUTUBE_PLAYER_CLIENTS
+    )
     # Prefer a non-empty cookies.txt; otherwise fall back to reading cookies
     # directly from a configured browser.
     cookies = _find_cookies_file()
