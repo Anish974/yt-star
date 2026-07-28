@@ -19,6 +19,8 @@ services:
     envVars:
       - key: PYTHONUNBUFFERED
         value: "1"
+      - key: PORT
+        value: "8000"
       # YouTube blocks datacenter IPs. If downloads fail with "Sign in to confirm
       # you're not a bot", add your YouTube cookies as a Render Secret File:
       #   Dashboard -> this service -> Environment -> Secret Files -> Add Secret File
