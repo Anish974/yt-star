@@ -15,9 +15,37 @@
 
 ---
 
+## ⚡ Super Easy Setup (Start in 10 Seconds!)
+
+### 🪟 Windows Users (1-Click Launch)
+1. **Download/Clone the repository:**
+   ```bash
+   git clone https://github.com/Anish974/yt-star.git
+   cd yt-star
+   ```
+2. **Double-click `run_local.bat`**
+   - That's it! It automatically installs required dependencies, opens `http://localhost:8000` in your web browser, and starts the downloader backend.
+
+---
+
+### 🐧 Mac / Linux Users
+1. Clone the repo and navigate into the folder:
+   ```bash
+   git clone https://github.com/Anish974/yt-star.git
+   cd yt-star
+   ```
+2. Install dependencies & start:
+   ```bash
+   pip install -r backend/requirements.txt
+   python backend/main.py
+   ```
+3. Open **`http://localhost:8000`** in your browser.
+
+---
+
 ## 💡 Why Local-First / Self-Hosted?
 
-Running YTStar **locally on your own PC** is the recommended way to use video downloaders. Here is why:
+Running YTStar **locally on your own PC** is the best and most reliable way to download media. Here is why:
 
 * 🛡️ **No Bot Detection / Rate Limits:** Public cloud providers (Render, Heroku, AWS) get flagged by YouTube rapidly with `429 Too Many Requests` or CAPTCHAs. Your local home IP avoids these blocks effortlessly.
 * 🚀 **Unrestricted Speed & Storage:** Download high-bitrate 1080p, 4K videos or full playlists directly to your hard drive without cloud storage limits or bandwidth throttling.
@@ -31,50 +59,7 @@ Running YTStar **locally on your own PC** is the recommended way to use video do
 - ⚡ **Real-Time Progress Tracking**: Live download speed, percentage, ETA, and status streaming via **Server-Sent Events (SSE)**.
 - 🎵 **Audio Extraction**: Easily convert videos to high-quality MP3 / M4A audio files.
 - ⚙️ **Quality Selection**: Choose specific video resolutions (1080p, 720p, 4K) or audio formats before downloading.
-- 🌐 **Instant Public Sharing (Optional)**: Included `run_local.bat` / `run_local.ps1` sets up a secure **Cloudflare Tunnel**, giving you a shareable URL to access your app remotely from mobile devices without port forwarding!
 - 🐳 **Docker & Cloud Ready**: Optional `Dockerfile` and `render.yaml` included for container labs and home servers.
-
----
-
-## 🚀 Quick Start — Recommended (Windows 1-Click Setup)
-
-Run YTStar locally on Windows in seconds:
-
-1. Double-click **`run_local.bat`**.
-2. The script will automatically:
-   - Check and install Python dependencies (`requirements.txt`).
-   - Open **`http://localhost:8000`** in your default web browser.
-   - Launch the FastAPI backend server instantly!
-
----
-
-## 💻 Manual Local Installation
-
-### Prerequisites
-- **Python 3.9+** installed and added to PATH.
-- **FFmpeg** (Recommended for merging 1080p/4K video + audio streams).
-
-### Setup Steps
-
-1. **Clone the repository:**
-   ```bash
-   git clone https://github.com/Anish974/yt-star.git
-   cd yt-star
-   ```
-
-2. **Install Backend Dependencies:**
-   ```bash
-   pip install -r backend/requirements.txt
-   ```
-
-3. **Start the Backend Server:**
-   ```bash
-   cd backend
-   python main.py
-   ```
-
-4. **Access the Web App:**
-   Open your browser and navigate to `http://localhost:8000`.
 
 ---
 
@@ -121,8 +106,7 @@ ytstar/
 │   └── img/             # UI assets & preview screenshot
 ├── Dockerfile           # Docker container configuration
 ├── render.yaml          # Render deployment manifest
-├── run_local.bat        # Windows 1-click batch launcher
-└── run_local.ps1        # PowerShell automated launcher script
+└── run_local.bat        # Windows 1-click batch launcher
 ```
 
 ---
