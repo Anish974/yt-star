@@ -1,11 +1,12 @@
 # 🌟 YTStar - Self-Hosted Video & Audio Downloader
 
-> A fast, modern, **local-first** self-hosted web application for downloading videos and audio from YouTube and 1000+ supported platforms, powered by **FastAPI** and **yt-dlp**.
+> A fast, modern, **local-first** web interface for downloading videos and audio from YouTube and 1000+ supported platforms, built with **FastAPI** and powered by **yt-dlp**.
 
 ![YTStar Banner](https://img.shields.io/badge/YTStar-v1.0-blue?style=for-the-badge&logo=youtube)
 ![Python](https://img.shields.io/badge/Python-3.9+-yellow?style=for-the-badge&logo=python)
 ![FastAPI](https://img.shields.io/badge/FastAPI-0.115+-green?style=for-the-badge&logo=fastapi)
 ![yt-dlp](https://img.shields.io/badge/yt--dlp-Latest-red?style=for-the-badge)
+![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
 ---
 
@@ -24,7 +25,7 @@
    cd yt-star
    ```
 2. **Double-click `run_local.bat`**
-   - That's it! It automatically installs required dependencies, opens `http://localhost:8000` in your web browser, and starts the downloader backend.
+   - That's it! It automatically installs required dependencies, opens `http://localhost:8000` in your web browser, and launches the app.
 
 ---
 
@@ -41,11 +42,13 @@
    ```
 3. Open **`http://localhost:8000`** in your browser.
 
+> 💡 **FFmpeg Note:** Installing [FFmpeg](https://ffmpeg.org/) on your system is recommended so `yt-dlp` can seamlessly merge 1080p/4K video and audio streams.
+
 ---
 
 ## 💡 Why Local-First / Self-Hosted?
 
-Running YTStar **locally on your own PC** is the best and most reliable way to download media. Here is why:
+Running YTStar **locally on your own PC** is the most reliable way to download media:
 
 * 🛡️ **No Bot Detection / Rate Limits:** Public cloud providers (Render, Heroku, AWS) get flagged by YouTube rapidly with `429 Too Many Requests` or CAPTCHAs. Your local home IP avoids these blocks effortlessly.
 * 🚀 **Unrestricted Speed & Storage:** Download high-bitrate 1080p, 4K videos or full playlists directly to your hard drive without cloud storage limits or bandwidth throttling.
@@ -59,7 +62,18 @@ Running YTStar **locally on your own PC** is the best and most reliable way to d
 - ⚡ **Real-Time Progress Tracking**: Live download speed, percentage, ETA, and status streaming via **Server-Sent Events (SSE)**.
 - 🎵 **Audio Extraction**: Easily convert videos to high-quality MP3 / M4A audio files.
 - ⚙️ **Quality Selection**: Choose specific video resolutions (1080p, 720p, 4K) or audio formats before downloading.
-- 🐳 **Docker & Cloud Ready**: Optional `Dockerfile` and `render.yaml` included for container labs and home servers.
+- 🍪 **Cookies Support**: Place your `cookies.txt` file in `backend/cookies.txt` to download age-restricted or private videos.
+- 🐳 **Docker Ready**: Optional `Dockerfile` included for home labs and NAS servers.
+
+---
+
+## 🛠️ Maintenance & Troubleshooting
+
+### 🔄 Updating `yt-dlp`
+If YouTube updates their player and downloads start failing, simply upgrade `yt-dlp` to the latest version:
+```bash
+pip install --upgrade yt-dlp
+```
 
 ---
 
@@ -79,16 +93,6 @@ Visit `http://localhost:8000` in your web browser.
 
 ---
 
-## ☁️ Cloud Deployment (Optional)
-
-If you still wish to host YTStar in the cloud via **Render**:
-
-1. Fork/Push this repository to GitHub.
-2. Log into [Render](https://render.com/).
-3. Create a new **Web Service** using `render.yaml`.
-
----
-
 ## 🛠️ Project Structure
 
 ```
@@ -105,9 +109,17 @@ ytstar/
 │   ├── app.js           # Frontend logic & SSE listener
 │   └── img/             # UI assets & preview screenshot
 ├── Dockerfile           # Docker container configuration
-├── render.yaml          # Render deployment manifest
 └── run_local.bat        # Windows 1-click batch launcher
 ```
+
+---
+
+## 🤝 Acknowledgements & Credits
+
+YTStar is an open-source web UI wrapper built on top of amazing open-source projects:
+- **[yt-dlp](https://github.com/yt-dlp/yt-dlp)** — The incredible command-line media extraction tool that does all the heavy lifting.
+- **[FastAPI](https://fastapi.tiangolo.com/)** — Modern, high-performance Web framework for Python.
+- **[FFmpeg](https://ffmpeg.org/)** — The leading multimedia framework for audio/video processing.
 
 ---
 
