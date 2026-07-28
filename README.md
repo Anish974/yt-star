@@ -1,6 +1,6 @@
 # 🌟 YTStar - Self-Hosted Video & Audio Downloader
 
-> A fast, modern, self-hosted web application for downloading videos and audio from YouTube and 1000+ supported platforms, powered by **FastAPI** and **yt-dlp**.
+> A fast, modern, **local-first** self-hosted web application for downloading videos and audio from YouTube and 1000+ supported platforms, powered by **FastAPI** and **yt-dlp**.
 
 ![YTStar Banner](https://img.shields.io/badge/YTStar-v1.0-blue?style=for-the-badge&logo=youtube)
 ![Python](https://img.shields.io/badge/Python-3.9+-yellow?style=for-the-badge&logo=python)
@@ -9,28 +9,44 @@
 
 ---
 
+## 📸 App Preview
+
+![YTStar App Preview](frontend/img/image.png)
+
+---
+
+## 💡 Why Local-First / Self-Hosted?
+
+Running YTStar **locally on your own PC** is the recommended way to use video downloaders. Here is why:
+
+* 🛡️ **No Bot Detection / Rate Limits:** Public cloud providers (Render, Heroku, AWS) get flagged by YouTube rapidly with `429 Too Many Requests` or CAPTCHAs. Your local home IP avoids these blocks effortlessly.
+* 🚀 **Unrestricted Speed & Storage:** Download high-bitrate 1080p, 4K videos or full playlists directly to your hard drive without cloud storage limits or bandwidth throttling.
+* 🔒 **Complete Privacy:** Your media downloads, history, and configuration stay 100% private on your machine.
+
+---
+
 ## ✨ Features
 
 - 🎥 **Multi-Platform Support**: Download videos from YouTube, Vimeo, Twitter, TikTok, Instagram, and 1000+ other sites supported by `yt-dlp`.
 - ⚡ **Real-Time Progress Tracking**: Live download speed, percentage, ETA, and status streaming via **Server-Sent Events (SSE)**.
-- 🎵 **Audio Extraction**: Easily convert videos to MP3 / M4A audio files.
-- ⚙️ **Quality Selection**: Choose specific video resolutions (1080p, 720p, 4K) or audio qualities before downloading.
-- 🌐 **Instant Public Sharing**: Included `run_local.bat` / `run_local.ps1` automatically sets up a secure **Cloudflare Tunnel**, giving you a shareable online URL without port forwarding!
-- 🐳 **Docker & Cloud Ready**: Ready-to-use `Dockerfile` and `render.yaml` for 1-click cloud deployment.
+- 🎵 **Audio Extraction**: Easily convert videos to high-quality MP3 / M4A audio files.
+- ⚙️ **Quality Selection**: Choose specific video resolutions (1080p, 720p, 4K) or audio formats before downloading.
+- 🌐 **Instant Public Sharing (Optional)**: Included `run_local.bat` / `run_local.ps1` sets up a secure **Cloudflare Tunnel**, giving you a shareable URL to access your app remotely from mobile devices without port forwarding!
+- 🐳 **Docker & Cloud Ready**: Optional `Dockerfile` and `render.yaml` included for container labs and home servers.
 
 ---
 
-## 🚀 Quick Start (Windows 1-Click Setup)
+## 🚀 Quick Start — Recommended (Windows 1-Click Setup)
 
-If you are on Windows, you can start YTStar and generate a public shareable URL with a single click:
+Run YTStar locally on Windows in seconds:
 
 1. Double-click **`run_local.bat`**.
 2. The script will automatically:
-   - Verify Python installation.
+   - Check for Python installation.
    - Install required dependencies (`requirements.txt`).
-   - Download `cloudflared.exe` if not present.
+   - Download `cloudflared.exe` if needed.
    - Start the FastAPI backend server on `http://localhost:8000`.
-   - Launch a **Cloudflare Tunnel** and output a public `.trycloudflare.com` URL.
+   - Launch a **Cloudflare Tunnel** and provide a public `.trycloudflare.com` URL (so you can access it on your phone!).
 
 ---
 
@@ -38,7 +54,7 @@ If you are on Windows, you can start YTStar and generate a public shareable URL 
 
 ### Prerequisites
 - **Python 3.9+** installed and added to PATH.
-- **FFmpeg** (Recommended for merging best video + audio streams).
+- **FFmpeg** (Recommended for merging 1080p/4K video + audio streams).
 
 ### Setup Steps
 
@@ -58,19 +74,15 @@ If you are on Windows, you can start YTStar and generate a public shareable URL 
    cd backend
    python main.py
    ```
-   *(or run via Uvicorn directly)*:
-   ```bash
-   uvicorn backend.main:app --host 0.0.0.0 --port 8000 --reload
-   ```
 
 4. **Access the Web App:**
    Open your browser and navigate to `http://localhost:8000`.
 
 ---
 
-## 🐳 Running with Docker
+## 🐳 Running with Docker (Home Lab / Local Server)
 
-You can containerize and run YTStar using Docker:
+Run YTStar inside a Docker container on your local machine or NAS:
 
 ```bash
 # Build the Docker image
@@ -84,14 +96,13 @@ Visit `http://localhost:8000` in your web browser.
 
 ---
 
-## ☁️ Deployment (Render / Cloud)
+## ☁️ Cloud Deployment (Optional)
 
-YTStar is pre-configured for deployment on **Render**:
+If you still wish to host YTStar in the cloud via **Render**:
 
 1. Fork/Push this repository to GitHub.
 2. Log into [Render](https://render.com/).
-3. Create a new **Blueprint** or **Web Service** using `render.yaml`.
-4. Render will automatically build the container and deploy the app.
+3. Create a new **Web Service** using `render.yaml`.
 
 ---
 
@@ -108,7 +119,8 @@ ytstar/
 ├── frontend/
 │   ├── index.html       # Web UI main layout
 │   ├── style.css        # Responsive styling & themes
-│   └── app.js           # Frontend logic & SSE listener
+│   ├── app.js           # Frontend logic & SSE listener
+│   └── img/             # UI assets & preview screenshot
 ├── Dockerfile           # Docker container configuration
 ├── render.yaml          # Render deployment manifest
 ├── run_local.bat        # Windows 1-click batch launcher
