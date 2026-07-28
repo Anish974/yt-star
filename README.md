@@ -42,11 +42,9 @@ Run YTStar locally on Windows in seconds:
 
 1. Double-click **`run_local.bat`**.
 2. The script will automatically:
-   - Check for Python installation.
-   - Install required dependencies (`requirements.txt`).
-   - Download `cloudflared.exe` if needed.
-   - Start the FastAPI backend server on `http://localhost:8000`.
-   - Launch a **Cloudflare Tunnel** and provide a public `.trycloudflare.com` URL (so you can access it on your phone!).
+   - Check and install Python dependencies (`requirements.txt`).
+   - Open **`http://localhost:8000`** in your default web browser.
+   - Launch the FastAPI backend server instantly!
 
 ---
 
