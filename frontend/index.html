@@ -12,10 +12,7 @@
     <script>
         (function () {
             try {
-                var t = localStorage.getItem('ytstar-theme');
-                if (!t) {
-                    t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) ? 'light' : 'dark';
-                }
+                var t = localStorage.getItem('ytstar-theme') || 'dark';
                 document.documentElement.setAttribute('data-theme', t);
             } catch (e) { /* localStorage blocked — default dark via CSS */ }
         })();
